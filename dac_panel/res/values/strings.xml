@@ -81,10 +81,8 @@
     <string name="dac_impedance"><xliff:g id="ohms" example="32">%1$d</xliff:g> Ω</string>
     <string name="dac_impedance_lr">L <xliff:g id="left" example="32">%1$d</xliff:g> Ω, R <xliff:g id="right" example="33">%2$d</xliff:g> Ω</string>
     <string name="dac_impedance_lr_short"><xliff:g id="left" example="32">%1$d</xliff:g>/<xliff:g id="right" example="33">%2$d</xliff:g> Ω</string>
-    <string name="dac_impedance_uneven"><xliff:g id="impedance" example="L 20 Ω, R 147 Ω">%1$s</xliff:g>, uneven reading</string>
     <string name="dac_impedance_floating">AUX/Line out</string>
     <string name="dac_impedance_unknown">Not measured</string>
-    <string name="dac_mode_suggestion"><xliff:g id="impedance" example="300 Ω">%1$s</xliff:g>, <xliff:g id="mode" example="High Impedance">%2$s</xliff:g> mode suggested</string>
     <string name="dac_mode_auto"><xliff:g id="impedance" example="32 Ω">%1$s</xliff:g>, <xliff:g id="mode" example="Low impedance">%2$s</xliff:g> mode</string>
     <string name="dac_mode_auto_pending"><xliff:g id="impedance" example="300 Ω">%1$s</xliff:g>, <xliff:g id="mode" example="High impedance">%2$s</xliff:g> mode from next playback</string>
     <string name="dac_tile_format"><xliff:g id="rate" example="48 kHz">%1$s</xliff:g>/<xliff:g id="bits" example="24">%2$d</xliff:g>-bit</string>

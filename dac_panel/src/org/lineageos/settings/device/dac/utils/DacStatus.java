@@ -14,11 +14,6 @@ import vendor.lge.hardware.audio.dac.control.V2_1.OutputStatus;
 /* Panel and tile text for the driver's output status */
 public final class DacStatus {
 
-    // Bounds the MBHC driver uses to classify headphones when the DAC is present
-    private static final int HIGH_IMPEDANCE_MIN_OHMS = 47;
-    private static final int AUX_MIN_OHMS = 420;
-    private static final int UNEVEN_RATIO = 2;
-
     private DacStatus() {}
 
     public static String formatRate(Context context, int hz) {
@@ -30,25 +25,6 @@ public final class DacStatus {
     private static boolean isFloating(OutputStatus status) {
         return status.impedanceLeft == Impedance.FLOATING
                 || status.impedanceRight == Impedance.FLOATING;
-    }
-
-    // Stereo drivers match; a large L/R gap means the plug moved during the measurement
-    private static boolean isUneven(OutputStatus status) {
-        int low = Math.min(status.impedanceLeft, status.impedanceRight);
-        int high = Math.max(status.impedanceLeft, status.impedanceRight);
-        return !isFloating(status) && high > 0 && high > UNEVEN_RATIO * low;
-    }
-
-    // Hi-Fi mode matching the measured load, or -1 if nothing usable was measured
-    public static int suggestedMode(OutputStatus status) {
-        int ohms = Math.max(status.impedanceLeft, status.impedanceRight);
-        if (isUneven(status))
-            return -1;
-        if (isFloating(status) || ohms > AUX_MIN_OHMS)
-            return 2;
-        if (ohms >= HIGH_IMPEDANCE_MIN_OHMS)
-            return 1;
-        return ohms > 0 ? 0 : -1;
     }
 
     // IDLE drops to BYPASS a few seconds after the stream stops; keep re-reading until then
@@ -88,25 +64,7 @@ public final class DacStatus {
     public static String headphones(Context context, OutputStatus status, int selectedMode) {
         if (status == null)
             return context.getString(R.string.dac_status_unavailable);
-        if (isUneven(status))
-            return context.getString(R.string.dac_impedance_uneven,
-                    impedance(context, status, false));
-        int suggested = suggestedMode(status);
-        if (suggested < 0)
-            return context.getString(R.string.dac_impedance_unknown);
-        String text = impedance(context, status, false);
-        String mode = context.getResources().getStringArray(R.array.hifi_mode_entry_values)[suggested];
-        // A floating reading already names the AUX/Line out mode
-        if (isFloating(status) && suggested == (selectedMode == Constants.HIFI_MODE_AUTO
-                ? status.hifiMode : selectedMode))
-            return text;
-        // Auto applies the mode when the DAC next starts, not while it is running
-        if (selectedMode == Constants.HIFI_MODE_AUTO)
-            return context.getString(status.hifiMode == suggested ? R.string.dac_mode_auto
-                    : R.string.dac_mode_auto_pending, text, mode);
-        if (suggested == selectedMode)
-            return text;
-        return context.getString(R.string.dac_mode_suggestion, text, mode);
+        return impedance(context, status, false);
     }
 
     // Short form for the QS tile, null when there is nothing useful to add
