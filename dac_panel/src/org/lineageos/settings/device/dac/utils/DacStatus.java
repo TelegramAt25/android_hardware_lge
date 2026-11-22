@@ -127,9 +127,6 @@ public final class DacStatus {
             default:
                 return null;
         }
-        if (suggestedMode(status) < 0)
-            return state;
-        return context.getString(R.string.dac_tile_subtitle, state,
-                impedance(context, status, true));
+        return state;
     }
 }
